@@ -1,0 +1,14 @@
+.loadMoreBtn {
+  border: none;
+  border-radius: 0;
+  width: 200px;
+  height: 40px;
+  background-color: blue;
+  color: white;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
