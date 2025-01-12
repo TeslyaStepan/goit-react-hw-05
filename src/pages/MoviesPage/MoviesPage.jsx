@@ -12,12 +12,6 @@ export default function MoviesPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const query = searchParams.get("query") || "";
-
-  const onSubmit = (values) => {
-    handleChangeQuery(values.query);
-  };
-
   useEffect(() => {
     if (!query) {
       setData([]);
@@ -39,8 +33,9 @@ export default function MoviesPage() {
     getData();
   }, [query]);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Something went wrong. Please try again later.</p>;
+  const onSubmit = (values) => {
+    handleChangeQuery(values.query);
+  };
 
   const handleChangeQuery = (newQuery) => {
     if (!newQuery) {
@@ -50,6 +45,11 @@ export default function MoviesPage() {
     searchParams.set("query", newQuery);
     setSearchParams(searchParams);
   };
+
+  const query = searchParams.get("query") || "";
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Something went wrong. Please try again later.</p>;
 
   const filterByQuery =
     (data &&
@@ -74,7 +74,7 @@ export default function MoviesPage() {
           </Form>
         </Formik>
       </div>
-      <MovieList filterByQuery={filterByQuery} />
+      <MovieList movies={filterByQuery} />
     </div>
   );
 }

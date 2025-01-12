@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import s from "./MovieList.module.css";
 
-export default function MovieList({ filterByQuery }) {
+export default function MovieList({ movies }) {
   const location = useLocation();
   return (
     <div>
       <ul className={s.movieList}>
-        {filterByQuery.map((movie) => (
+        {movies.map((movie) => (
           <li key={movie.id}>
             <div className={s.movieContainer}>
               <Link

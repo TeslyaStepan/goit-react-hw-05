@@ -1,13 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
+// import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchHomeList } from "../../TMDB-api";
 import s from "./HomePage.module.css";
+import MovieList from "../../components/MovieList/MovieList";
 
 export default function HomePage() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const location = useLocation();
+  // const location = useLocation();
 
   useEffect(() => {
     const getData = async () => {
@@ -31,7 +32,7 @@ export default function HomePage() {
   return (
     <div className={s.homePage}>
       <h2 className={s.title}>Trending today</h2>
-      <ul className={s.movieList}>
+      {/* <ul className={s.movieList}>
         {data.map((movie) => (
           <li key={movie.id}>
             <div className={s.movieContainer}>
@@ -50,7 +51,8 @@ export default function HomePage() {
             </div>
           </li>
         ))}
-      </ul>
+      </ul> */}
+      <MovieList movies={data} />
     </div>
   );
 }
