@@ -1,22 +1,21 @@
 import "modern-normalize";
-import { Routes, Route, NavLink } from "react-router-dom";
-// import toast from "react-hot-toast";
+import { Routes, Route } from "react-router-dom";
 import { lazy } from "react";
-// import { useHttp } from "./hooks/useHttp/useHttp";
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
+const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+const MovieDetailsPage = lazy(() =>
+  import("./pages/MovieDetailsPage/MovieDetailsPage")
+);
 
 const App = () => {
-  // const [isLoading] = useHttp;
   return (
     <>
-      <header>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/movie">Movies</NavLink>
-      </header>
+      <Navigation />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/movie" element={<MoviesPage />} />
+        <Route path="/movies" element={<MoviesPage />} />
+        <Route path="/movies/:moviesId" element={<MovieDetailsPage />} />
       </Routes>
     </>
   );

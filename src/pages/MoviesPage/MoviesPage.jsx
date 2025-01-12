@@ -1,21 +1,44 @@
 import { Field, Form, Formik } from "formik";
-import { Link, useSearchParams } from "react-router-dom";
-import { useHttp } from "../../hooks/useHttp/useHttp";
+import { useSearchParams } from "react-router-dom";
 import { fetchMovieList } from "../../TMDB-api";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
+const MovieList = lazy(() => import("../../components/MovieList/MovieList"));
 
 export default function MoviesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [movies] = useHttp(fetchMovieList);
-  const [query, setQuery] = useState(searchParams.get("query") ?? "");
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    setQuery(searchParams.get("query") ?? "");
-  }, [searchParams]);
+  const query = searchParams.get("query") || "";
 
   const onSubmit = (values) => {
     handleChangeQuery(values.query);
   };
+
+  useEffect(() => {
+    if (!query) {
+      setData([]);
+      return;
+    }
+
+    const getData = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchMovieList(query);
+        setData(data);
+      } catch (error) {
+        console.error(error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getData();
+  }, [query]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Something went wrong. Please try again later.</p>;
 
   const handleChangeQuery = (newQuery) => {
     if (!newQuery) {
@@ -26,24 +49,21 @@ export default function MoviesPage() {
     setSearchParams(searchParams);
   };
 
-  const filterByQuery = movies?.filter((movie) =>
-    movie.title.toLowerCase().trim().includes(query.trim().toLowerCase())
-  );
+  const filterByQuery =
+    (data &&
+      data?.filter((movie) =>
+        movie.title.toLowerCase().trim().includes(query.trim().toLowerCase())
+      )) ||
+    [];
   return (
     <div>
-      <Formik>
-        <Form onSubmit={onSubmit} initialValues={{ query }}>
+      <Formik initialValues={{ query }} onSubmit={onSubmit}>
+        <Form>
           <Field type="text" name="query" />
           <button type="submit">Search</button>
         </Form>
       </Formik>
-      <ul>
-        {filterByQuery.map((movie) => (
-          <li key={movie.id}>
-            <Link to={movie.id.toString()}>{movie.title || movie.name}</Link>
-          </li>
-        ))}
-      </ul>
+      <MovieList filterByQuery={filterByQuery} />
     </div>
   );
 }
