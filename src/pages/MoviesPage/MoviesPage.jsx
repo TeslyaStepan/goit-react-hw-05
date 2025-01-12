@@ -51,12 +51,12 @@ export default function MoviesPage() {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Something went wrong. Please try again later.</p>;
 
-  const filterByQuery =
-    (data &&
-      data?.filter((movie) =>
-        movie.title.toLowerCase().trim().includes(query.trim().toLowerCase())
-      )) ||
-    [];
+  // const filterByQuery =
+  //   (data &&
+  //     data?.filter((movie) =>
+  //       movie.title.toLowerCase().trim().includes(query.trim().toLowerCase())
+  //     )) ||
+  //   [];
   return (
     <div>
       <div className={s.formContainer}>
@@ -74,7 +74,7 @@ export default function MoviesPage() {
           </Form>
         </Formik>
       </div>
-      <MovieList movies={filterByQuery} />
+      <MovieList movies={data} />
     </div>
   );
 }
