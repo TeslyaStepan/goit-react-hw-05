@@ -2,6 +2,8 @@ import { Field, Form, Formik } from "formik";
 import { useSearchParams } from "react-router-dom";
 import { fetchMovieList } from "../../TMDB-api";
 import { lazy, useEffect, useState } from "react";
+import s from "./MoviesPage.module.css";
+import { CiSearch } from "react-icons/ci";
 const MovieList = lazy(() => import("../../components/MovieList/MovieList"));
 
 export default function MoviesPage() {
@@ -57,12 +59,21 @@ export default function MoviesPage() {
     [];
   return (
     <div>
-      <Formik initialValues={{ query }} onSubmit={onSubmit}>
-        <Form>
-          <Field type="text" name="query" />
-          <button type="submit">Search</button>
-        </Form>
-      </Formik>
+      <div className={s.formContainer}>
+        <Formik initialValues={{ query }} onSubmit={onSubmit}>
+          <Form className={s.form}>
+            <Field
+              className={s.field}
+              type="text"
+              name="query"
+              placeholder="Enter movie name"
+            />
+            <button className={s.button} type="submit">
+              <CiSearch />
+            </button>
+          </Form>
+        </Formik>
+      </div>
       <MovieList filterByQuery={filterByQuery} />
     </div>
   );

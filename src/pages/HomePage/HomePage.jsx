@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { lazy, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchHomeList } from "../../TMDB-api";
+import s from "./HomePage.module.css";
 
 export default function HomePage() {
   const [data, setData] = useState([]);
@@ -28,14 +29,25 @@ export default function HomePage() {
   if (isError) return <p>Something went wrong. Please try again later.</p>;
 
   return (
-    <div>
-      <h2>Trending today</h2>
-      <ul>
+    <div className={s.homePage}>
+      <h2 className={s.title}>Trending today</h2>
+      <ul className={s.movieList}>
         {data.map((movie) => (
           <li key={movie.id}>
-            <Link to={`/movies/${movie.id.toString()}`} state={location}>
-              {movie.title}
-            </Link>
+            <div className={s.movieContainer}>
+              <Link
+                className={s.movieName}
+                to={`/movies/${movie.id.toString()}`}
+                state={location}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  width={300}
+                />
+                <p className={s.movieName}>{movie.title}</p>
+              </Link>
+            </div>
           </li>
         ))}
       </ul>
