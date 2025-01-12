@@ -12,6 +12,21 @@ export default function MoviesPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  const onSubmit = (values) => {
+    handleChangeQuery(values.query);
+  };
+
+  const handleChangeQuery = (newQuery) => {
+    if (!newQuery) {
+      searchParams.delete("query");
+      return setSearchParams(searchParams);
+    }
+    searchParams.set("query", newQuery);
+    setSearchParams(searchParams);
+  };
+
+  const query = searchParams.get("query") || "";
+
   useEffect(() => {
     if (!query) {
       setData([]);
@@ -32,21 +47,6 @@ export default function MoviesPage() {
     };
     getData();
   }, [query]);
-
-  const onSubmit = (values) => {
-    handleChangeQuery(values.query);
-  };
-
-  const handleChangeQuery = (newQuery) => {
-    if (!newQuery) {
-      searchParams.delete("query");
-      return setSearchParams(searchParams);
-    }
-    searchParams.set("query", newQuery);
-    setSearchParams(searchParams);
-  };
-
-  const query = searchParams.get("query") || "";
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Something went wrong. Please try again later.</p>;
